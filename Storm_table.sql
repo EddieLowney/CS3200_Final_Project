@@ -23,16 +23,34 @@ CREATE TABLE events (
 DROP TABLE IF EXISTS fatalities;
 CREATE TABLE fatalities (
     fatality_id int PRIMARY KEY,
-    event_id int PRIMARY KEY,
+    event_id int,
     fatality_location VARCHAR(255) NOT NULL,
     fatality_date DATETIME,
     fatality_type VARCHAR(50),
     fatality_age int,
-    fatality_sex VARCHAR(50)
+    fatality_sex VARCHAR(50),
+    CONSTRAINT fk_event FOREIGN KEY (event_id) REFERENCES events(event_id)
     );
 
+DROP TABLE IF EXISTS locations;
+CREATE TABLE locations (
+	yearmonth INT,
+    episode_id INT,
+    event_id INT,
+    location_index INT,
+    `range` DECIMAL(5,2),
+    location VARCHAR(255),
+    latitude DECIMAL(8,4),
+    longitude DECIMAL(9,4),
+    lat2 INT,
+    lon2 INT,
+    PRIMARY KEY (yearmonth, episode_id, event_id, location_index),
+    CONSTRAINT fk_event_location FOREIGN KEY (event_id) REFERENCES events(event_id)
+	);
+    
+    
 -- Reading files into Details
-LOAD DATA LOCAL INFILE '/Users/colinjohnson/Downloads/StormEvents_details-ftp_v1.0_d2020_c20240620.csv'
+LOAD DATA LOCAL INFILE '/Users/ameliadsouza/Downloads/StormEvents_details-ftp_v1.0_d2010_c20250401.csv'
 INTO TABLE storm.events
 FIELDS TERMINATED BY ',' 
 OPTIONALLY ENCLOSED BY '"'
@@ -42,7 +60,7 @@ IGNORE 1 LINES
  source, magnitude, deaths_direct, damage_property, damage_crops);
 
 -- Reading files into locations
-LOAD DATA LOCAL INFILE '/Users/colinjohnson/Downloads/StormEvents_fatalities-ftp_v1.0_d2020_c20240620.csv'
+LOAD DATA LOCAL INFILE '/Users/ameliadsouza/Downloads/StormEvents_fatalities-ftp_v1.0_d2010_c20220425.csv'
 INTO TABLE storm.fatalities
 FIELDS TERMINATED BY ',' 
 OPTIONALLY ENCLOSED BY '"'
@@ -50,6 +68,14 @@ LINES TERMINATED BY '\n'
 IGNORE 1 LINES
 (fatality_id, event_id, fatality_location, fatality_date, fatality_type, 
 fatality_age, fatality_sex);
+
+LOAD DATA LOCAL INFILE '/Users/ameliadsouza/Downloads/StormEvents_locations-ftp_v1.0_d2010_c20220425.csv'
+INTO TABLE storm.locations
+FIELDS TERMINATED BY ',' 
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\n' 
+IGNORE 1 LINES
+(yearmonth, episode_id, event_id, location_index, `range`, location, latitude, longitude, lat2, lon2);
 
 
 SELECT * FROM fatalities;
