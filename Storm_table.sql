@@ -17,7 +17,7 @@ CREATE TABLE events (
     deaths_direct int,
     damage_property int,
     damage_crops int
-    );
+);
 
 
 DROP TABLE IF EXISTS fatalities;
@@ -30,7 +30,7 @@ CREATE TABLE fatalities (
     fatality_age int,
     fatality_sex VARCHAR(50),
     CONSTRAINT fk_event FOREIGN KEY (event_id) REFERENCES events(event_id)
-    );
+);
 
 DROP TABLE IF EXISTS locations;
 CREATE TABLE locations (
@@ -46,8 +46,15 @@ CREATE TABLE locations (
     lon2 INT,
     PRIMARY KEY (yearmonth, episode_id, event_id, location_index),
     CONSTRAINT fk_event_location FOREIGN KEY (event_id) REFERENCES events(event_id)
-	);
-    
+);
+
+DROP TABLE IF EXISTS claims;
+CREATE TABLE claims (
+	county_id INT AUTO_INCREMENT PRIMARY KEY,
+	county VARCHAR(255),
+    total_paid_claims INT,
+    total_claim_dollars_paid DECIMAL(12,2) 
+);
     
 -- Reading files into Details
 LOAD DATA LOCAL INFILE '/Users/ameliadsouza/Downloads/StormEvents_details-ftp_v1.0_d2010_c20250401.csv'
@@ -77,5 +84,12 @@ LINES TERMINATED BY '\n'
 IGNORE 1 LINES
 (yearmonth, episode_id, event_id, location_index, `range`, location, latitude, longitude, lat2, lon2);
 
+LOAD DATA LOCAL INFILE '/Users/ameliadsouza/Downloads/Cleaned_Claims_Numeric.csv'
+INTO TABLE storm.claims
+FIELDS TERMINATED BY ',' 
+OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 LINES
+(county, total_paid_claims, total_claim_dollars_paid);
 
 SELECT * FROM fatalities;
