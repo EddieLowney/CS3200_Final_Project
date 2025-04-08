@@ -38,9 +38,10 @@ BEGIN
     JOIN locations l_end ON e.event_id = l_end.event_id AND l_end.location_index = (
         SELECT MAX(location_index) FROM locations WHERE event_id = e.event_id
     )
-
+    -- Put the storms in descending order by the distance calculated by the haversine equation
     ORDER BY distance_moved_km DESC
     LIMIT number_of_storms;
+
 END //
 DELIMITER ;
 
