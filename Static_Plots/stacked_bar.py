@@ -2,6 +2,11 @@ import mysql.connector
 import pandas as pd
 import matplotlib.pyplot as plt
 
+'''
+Fetches fatality age and gender data from a MySQL database and 
+displays a stacked bar chart of fatalities by age group and gender.
+'''
+
 # Connect to MySQL
 conn = mysql.connector.connect(
     host="localhost",
