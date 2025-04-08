@@ -1,3 +1,7 @@
+-- This query finds the average loss of crops by mangitude
+-- This makes use of a while loop, looping until there are no more rows left
+-- Saves this a callable stored procedure and is ported to python
+
 DROP PROCEDURE IF EXISTS GetAverageLossesByMagnitude;
 DELIMITER //
 
