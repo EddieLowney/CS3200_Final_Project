@@ -2,6 +2,10 @@ import mysql.connector
 import pandas as pd
 import matplotlib.pyplot as plt
 
+'''
+Retrieves storm event durations from a MySQL database and visualizes 
+them by event type using a box plot.
+'''
 # Connect to MySQL
 conn = mysql.connector.connect(
     host="localhost",
